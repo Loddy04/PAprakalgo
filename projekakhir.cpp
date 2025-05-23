@@ -55,6 +55,7 @@ void simpanKeluhan() {
 
 // Fungsi untuk membuat keluhan baru
 void buatKeluhan() {
+    muatKeluhandariFile();
     Keluhan *baru = new Keluhan;
 
     cout << "Nama pelapor : "; cin >> baru->nama;
@@ -91,7 +92,65 @@ void tampilKeluhan() {
     return;
 }
 
+void cariNama() {
+    string cari;
+    cout << "Masukkan nama pelapor yang dicari : "; cin >> cari;
+    Keluhan *bantu = temp;
+    while (bantu != nullptr) {
+        if (bantu->nama == cari) {
+            cout << "Pelapor ke : " << bantu->id << endl;
+            cout << "Nama pelapor : " << bantu->nama << endl;
+            cout << "Kategori keluhan : " << bantu->kategori << endl;
+            cout << "Isi keluhan : \n"; 
+            cout << bantu->isi << endl;
+        }
+        bantu = bantu->next;
+    }
+}
+
+
+void cariTopik() {
+    string cari;
+    cout << "Masukkan kategori keluhan yang dicari : "; cin >> cari;
+    Keluhan *bantu = temp;
+    while (bantu != nullptr) {
+        if (bantu->kategori == cari) {
+            cout << "Pelapor ke : " << bantu->id << endl;
+            cout << "Nama pelapor : " << bantu->nama << endl;
+            cout << "Kategori keluhan : " << bantu->kategori << endl;
+            cout << "Isi keluhan : \n"; 
+            cout << bantu->isi << endl;
+        }
+        bantu = bantu->next;
+    }
+}
+
+void cariKeluhan() {
+    int pilih;
+    cout << "~~ Menu Pencarian Keluhan ~~\n";
+    cout << "1. Cari berdasarkan nama pelapor\n";
+    cout << "2. Cari berdasarkan kategori keluhan\n";
+    cout << "3. Kembali ke menu utama\n";
+    cout << "Masukkan pilihan : "; cin >> pilih;
+
+    switch (pilih) {
+        case 1:
+            cariNama();
+            break;
+        case 2:
+            cariTopik();
+            break;
+        case 3:
+            return;
+        default:
+            cout << "Pilihan tidak valid, silakan coba lagi.\n";
+            break;
+    }
+}
+
+// Fungsi untuk menghapus keluhan
 void hapusKeluhan() {
+    muatKeluhandariFile();
     if (temp == nullptr) {
         cout << "Belum ada keluhan\n";
         return;
@@ -108,7 +167,6 @@ void hapusKeluhan() {
         }
     }
     simpanKeluhan();
-
 }
 
 // Fungsi untuk menampilkan menu utama
@@ -124,7 +182,6 @@ void tampilkanMenu() {
 
 int main () {
     int pilih;
-    muatKeluhandariFile();
     do {
         tampilkanMenu();
         cout << "Masukkan menu yang dipilih : "; cin >> pilih; 
@@ -137,24 +194,21 @@ int main () {
                 tampilKeluhan();
                 break;
             case 3: 
-                hapusKeluhan();
+                cariKeluhan();
                 break;
             case 4: 
                 // cari keluhan berdasarkan nama || id
                 break;
             case 5:
-                // urutkan keluhan berdasarkan nama || id
+                hapusKeluhan();
                 break;
             case 6:
-                // hapus keluhan berdasarkan id
-                break;
-            case 7: 
                 // keluar
                 // makasih ya keluhan segera di pr
                 break;
             default:
+                cout << "Menu tidak valid, silakan coba lagi.\n";
                 break;
-
         }
     } while (pilih < 8);
 
