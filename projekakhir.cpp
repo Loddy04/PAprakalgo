@@ -23,14 +23,14 @@ void muatKeluhandariFile() {
     while (!feof(file)) {
         Keluhan *baru = new Keluhan;
         fscanf(file, "%d %s %s %s\n", &baru->id, baru->nama.c_str(), baru->kategori.c_str(), baru->isi.c_str());
-        baru->next = nullptr;
-        if (temp == nullptr) {
-            temp = baru;
-            bantu = temp;
-        } else {
-            bantu->next = baru;
-            bantu = bantu->next;
-        }
+        // baru->next = nullptr;
+        // if (temp == nullptr) {
+        //     temp = baru;
+        //     bantu = temp;
+        // } else {
+        //     bantu->next = baru;
+        //     bantu = bantu->next;
+        // }
     }
     fclose(file);
 }
@@ -75,6 +75,7 @@ void buatKeluhan() {
 
 // Fungsi untuk menampilkan keluhan
 void tampilKeluhan() {
+    // muatKeluhandariFile();
     if (temp = nullptr) {
         cout << "Belum ada keluhan\n";
         return;
