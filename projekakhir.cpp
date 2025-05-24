@@ -1,16 +1,15 @@
-
 #include <iostream>
 using namespace std;
 
 struct Keluhan {
     int id;
-    string nama;
-    string kategori;
-    string isi;
+    char nama[50];
+    char kategori[50];
+    char isi[100];
     Keluhan *next; 
 };
 
-Keluhan *temp = nullptr;
+Keluhan *temp = nullptr; // !ampung awal sementara
 
 // Fungsi untuk memuat keluhan dari file
 void muatKeluhandariFile() {
@@ -19,37 +18,45 @@ void muatKeluhandariFile() {
         cout << "Gagal membuka file\n";
         return;
     }
-    Keluhan *bantu = nullptr;
-    while (!feof(file)) {
+
+    Keluhan *bantu = nullptr; // sebagai navigasi bantu
+    
+    while (!feof(file)){
         Keluhan *baru = new Keluhan;
-        fscanf(file, "%d %s %s %s\n", &baru->id, baru->nama.c_str(), baru->kategori.c_str(), baru->isi.c_str());
-        // baru->next = nullptr;
-        // if (temp == nullptr) {
-        //     temp = baru;
-        //     bantu = temp;
-        // } else {
-        //     bantu->next = baru;
-        //     bantu = bantu->next;
-        // }
+        baru->next = nullptr;
+
+        if (fscanf(file, "%d %s %s %[^\n]\n", &baru->id, baru->nama, baru->kategori, baru->isi) != 4) {
+            delete baru;
+            break;
+        }
+        
+        if (temp == nullptr) {
+            temp = baru;
+            bantu = temp;
+        } else {
+            bantu->next = baru;
+            bantu = bantu->next;
+        }
     }
+
     fclose(file);
 }
 
 // Fungsi untuk menyimpan keluhan ke file
 void simpanKeluhan() {
-    Keluhan *bantu = temp;
     FILE *file = fopen("keluhan.txt", "w");
     if (file == nullptr) {
         cout << "Gagal membuka file\n";
         return;
     }
+
+    Keluhan *bantu = temp;
     while (bantu != nullptr) {
-        fprintf(file, "%d %s %s %s\n", bantu->id, bantu->nama.c_str(), bantu->kategori.c_str(), bantu->isi.c_str());
+        fprintf(file, "%d %s %s %s\n", bantu->id, bantu->nama, bantu->kategori, bantu->isi);
         bantu = bantu->next;
     }
 
     fclose(file);
-    cout << "Keluhan berhasil disimpan ke file\n";
     return;
 }
 
@@ -58,25 +65,34 @@ void buatKeluhan() {
     muatKeluhandariFile();
     Keluhan *baru = new Keluhan;
 
-    cout << "Nama pelapor : "; cin >> baru->nama;
+    cout << "Nama pelapor (cukup 1 kata) : "; cin >> baru->nama;
     cout << "Kategori keluhan (Fasilitas, Dosen) : "; cin >> baru->kategori; cin.ignore();
-    cout << "Isi keluhan : \n"; getline(cin, baru->isi);
+    cout << "Isi keluhan : \n"; cin.getline(baru->isi, 100);
     baru->next = nullptr;
+
     if (temp == nullptr) {
         baru->id = 1;
         temp = baru;
     } else {
-        baru->id = baru->id++;
+        Keluhan *bantu = temp;
+        while (bantu->next != nullptr) {
+            bantu = bantu->next;
+        }
+        baru->id = baru->id + 1;
+        bantu->next = baru;
     }
-    cout << "Keluhan berhasil disimpan\n";
+
     simpanKeluhan();
-    return;
+    cout << "Keluhan berhasil disimpan\n\n";
+
+    system("pause");
+    system("cls");
 }
 
 // Fungsi untuk menampilkan keluhan
 void tampilKeluhan() {
     // muatKeluhandariFile();
-    if (temp = nullptr) {
+    if (temp == nullptr) {
         cout << "Belum ada keluhan\n";
         return;
     } else {
@@ -94,7 +110,7 @@ void tampilKeluhan() {
 }
 
 void cariNama() {
-    string cari;
+    char cari[50];
     cout << "Masukkan nama pelapor yang dicari : "; cin >> cari;
     Keluhan *bantu = temp;
     while (bantu != nullptr) {
@@ -109,9 +125,8 @@ void cariNama() {
     }
 }
 
-
 void cariTopik() {
-    string cari;
+    char cari[50];
     cout << "Masukkan kategori keluhan yang dicari : "; cin >> cari;
     Keluhan *bantu = temp;
     while (bantu != nullptr) {
@@ -172,13 +187,17 @@ void hapusKeluhan() {
 
 // Fungsi untuk menampilkan menu utama
 void tampilkanMenu() {
-    cout << "~~ Menu Sistem Laporan Keluhan Mahasiswa UPNVYK ~~\n";
-    cout << "1. Buat Keluhan Baru\n";
-    cout << "2. Tampilkan Keluhan Berdasarkan Kategori\n";
-    cout << "3. Cari Keluhan\n";
-    cout << "4. Urutkan Keluhan\n";
-    cout << "5. Hapus Keluhan\n";
-    cout << "6. Keluar\n";
+    cout << ":===========================================:\n";
+    cout << "|   Menu Sistem Laporan Keluhan Mahasiswa   |\n";
+    cout << "|         UPN 'Veteran' Yogyakarta          |\n";
+    cout << "|===========================================|\n";
+    cout << "| 1. Buat Keluhan Baru                      |\n";
+    cout << "| 2. Tampilkan Keluhan Berdasarkan Kategori |\n";
+    cout << "| 3. Cari Keluhan                           |\n";
+    cout << "| 4. Urutkan Keluhan                        |\n";
+    cout << "| 5. Hapus Keluhan                          |\n";
+    cout << "| 6. Keluar                                 |\n";
+    cout << ":===========================================:\n";
 }
 
 int main () {
@@ -186,9 +205,9 @@ int main () {
     do {
         tampilkanMenu();
         cout << "Masukkan menu yang dipilih : "; cin >> pilih; 
-
         switch (pilih) {
             case 1: 
+                system("cls");
                 buatKeluhan();
                 break;
             case 2: 
@@ -198,19 +217,22 @@ int main () {
                 cariKeluhan();
                 break;
             case 4: 
-                // cari keluhan berdasarkan nama || id
+                // urutkan keluhan
                 break;
             case 5:
                 hapusKeluhan();
                 break;
             case 6:
-                // keluar
-                // makasih ya keluhan segera di pr
+                cout << ":=============================================:\n";
+                cout << "| Terima kasih telah membuat laporan keluhan. |\n";
+                cout << "|      Keluhan akan segera kami proses.       |\n";
+                cout << ":=============================================:\n";
                 break;
             default:
-                cout << "Menu tidak valid, silakan coba lagi.\n";
+                cout << "\n!! <Menu tidak valid, silakan coba lagi.> !!\n";
                 break;
         }
     } while (pilih < 8);
 
+    return 0;
 }
