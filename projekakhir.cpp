@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstring>
 using namespace std;
 
 struct Keluhan {
@@ -67,8 +68,32 @@ void buatKeluhan() {
     Keluhan *baru = new Keluhan;
     cout << "+> Buat Laporan Keluhan\n\n";
 
-    cout << "Nama pelapor (cukup 1 kata)         : "; cin >> baru->nama;
-    cout << "Kategori keluhan (Fasilitas, Dosen) : "; cin >> baru->kategori; cin.ignore();
+    cout << "Nama pelapor (cukup 1 kata) : "; 
+    cin >> baru->nama;
+
+    int pilih;
+    cout << "Kategori keluhan\n"; 
+    cout << "1. Fasilitas\n";
+    cout << "2. Pelayanan\n";
+    cout << "3. Dosen\n";
+    cout << "Pilih kategori keluhan      : "; 
+    cin >> pilih;
+    switch (pilih) {
+    case 1:
+        strcpy(baru->kategori, "Fasilitas"); // menyalin 1 gaya string ke memori string lain
+        break;
+    case 2:
+        strcpy(baru->kategori, "Pelayanan"); 
+        break;
+    case 3:
+        strcpy(baru->kategori, "Dosen"); 
+        break;
+    default:
+        cout << "Pilihan tidak valid!\n";
+        break;
+    }
+
+    cin.ignore();
     cout << "Isi keluhan : \n"; cin.getline(baru->isi, 100);
     baru->next = nullptr;
 
@@ -101,20 +126,20 @@ void tampilKeluhan() {
     if (temp == nullptr) {
         cout << "Belum ada keluhan.\n";
         return;
-    } else {
-        Keluhan *bantu = temp;
-        while (bantu != nullptr) {
-            cout << ":                                              :\n";
-            cout << "| Pelapor ke : " << bantu->id << endl;
-            cout << "|----------------------------------------------\n";
-            cout << "| Nama pelapor : " << bantu->nama << endl;
-            cout << "| Kategori keluhan : " << bantu->kategori << endl;
-            cout << "| Isi keluhan : \n"; 
-            cout << "|----------------------------------------------\n";
-            cout << "| " << bantu->isi << endl;
-            cout << ":==============================================:\n\n";
-            bantu = bantu->next;
-        }
+    } 
+
+    Keluhan *bantu = temp;
+    while (bantu != nullptr) {
+        cout << ":==============================================:\n";
+        cout << "| Pelapor ke : " << bantu->id << endl;
+        cout << "|----------------------------------------------\n";
+        cout << "| Nama pelapor : " << bantu->nama << endl;
+        cout << "| Kategori keluhan : " << bantu->kategori << endl;
+        cout << "| Isi keluhan : \n"; 
+        cout << "|----------------------------------------------\n";
+        cout << "| " << bantu->isi << endl;
+        cout << ":==============================================:\n\n";
+        bantu = bantu->next;
     }
 
     system("pause");
@@ -201,27 +226,51 @@ void hapusKeluhan() {
 
     Keluhan *hapus;
     // masih error belum bisa nangkep nama yang di cari
-    if (temp->nama == cari) {
+    if (strcmp(temp->nama, cari) == 0) {
         // jika record yang dihapus berada di paling depan
+        // strcmp membandingkan string tipe char
         hapus = temp;
         temp = temp->next;
         delete hapus;
     } else {
         Keluhan *bantu = temp;
-        while (bantu->next != nullptr && bantu->next->nama != cari) {
+        while (bantu->next != nullptr && strcmp(bantu->next->nama, cari) != 0) {
             bantu = bantu->next;
         }
 
         if(bantu->next == nullptr) {
-            cout << "Keluhan dengan nama " << cari << " tidak ada.\n\n";
+            cout << "\n !! Keluhan dengan nama <" << cari << "> tidak ada !!\n\n";
             system("pause");
             system("cls");
             return;
         }
 
-        hapus = bantu->next;
-        bantu->next = hapus->next;
-        delete hapus;
+        cout << ":==============================================:\n";
+        cout << "| Nama pelapor : " << bantu->next->nama << endl;
+        cout << "| Kategori keluhan : " << bantu->next->kategori << endl;
+        cout << "| Isi keluhan : \n"; 
+        cout << "|----------------------------------------------\n";
+        cout << "| " << bantu->next->isi << endl;
+        cout << ":==============================================:\n\n";
+
+        char choice;
+        cout << "Yakin ingin menghapus? (y/n) : ";
+        cin.ignore();
+        cin >> choice;
+
+        if (choice == 'y' || choice == 'Y') {
+            hapus = bantu->next;
+            bantu->next = hapus->next;
+            delete hapus;
+        } else {
+            cout << endl;
+            cout << ":=================================:\n";
+            cout << "| Penghapusan keluhan dibatalkan. |\n";
+            cout << ":=================================:\n";
+            system("pause");
+            system("cls");
+            return;
+        }
     }
 
     simpanKeluhan();
@@ -230,6 +279,7 @@ void hapusKeluhan() {
     cout << ":============================:\n";
     cout << "| Keluhan berhasil dihapus.  |\n";
     cout << ":============================:\n";
+
 
     system("pause");
     system("cls");
