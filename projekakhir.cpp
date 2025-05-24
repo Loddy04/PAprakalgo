@@ -64,7 +64,6 @@ void simpanKeluhan() {
 
 // Fungsi untuk membuat keluhan baru
 void buatKeluhan() {
-    muatKeluhandariFile();
     Keluhan *baru = new Keluhan;
     cout << "+> Buat Laporan Keluhan\n\n";
 
@@ -97,7 +96,6 @@ void buatKeluhan() {
 
 // Fungsi untuk menampilkan keluhan
 void tampilKeluhan() {
-    muatKeluhandariFile();
     cout << "+> Laporan Keluhan\n\n";
 
     if (temp == nullptr) {
@@ -191,7 +189,6 @@ void cariKeluhan() {
 
 // Fungsi untuk menghapus keluhan
 void hapusKeluhan() {
-    muatKeluhandariFile();
     cout << "+> Hapus laporan keluhan \n\n";
 
     if (temp == nullptr) {
@@ -255,6 +252,7 @@ void tampilkanMenu() {
 
 int main () {
     int pilih;
+    muatKeluhandariFile();
     do {
         tampilkanMenu();
         cout << "Masukkan menu yang dipilih : "; cin >> pilih; 
