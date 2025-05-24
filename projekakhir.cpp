@@ -211,6 +211,100 @@ void cariKeluhan() {
             break;
     }
 }
+void tukarData(Keluhan *a, Keluhan *b) {
+    int tempId = a->id;
+    char tempNama[50], tempKategori[50], tempIsi[100];
+    
+    strcpy(tempNama, a->nama);
+    strcpy(tempKategori, a->kategori);
+    strcpy(tempIsi, a->isi);
+    
+    a->id = b->id;
+    strcpy(a->nama, b->nama);
+    strcpy(a->kategori, b->kategori);
+    strcpy(a->isi, b->isi);
+    
+    b->id = tempId;
+    strcpy(b->nama, tempNama);
+    strcpy(b->kategori, tempKategori);
+    strcpy(b->isi, tempIsi);
+}
+void urutkanById() {
+    if (temp == nullptr || temp->next == nullptr) return;
+    
+    bool swapped;
+    Keluhan *ptr1;
+    Keluhan *lptr = nullptr;
+    
+    do {
+        swapped = false;
+        ptr1 = temp;
+        
+        while (ptr1->next != lptr) {
+            if (ptr1->id > ptr1->next->id) {
+                tukarData(ptr1, ptr1->next);
+                swapped = true;
+            }
+            ptr1 = ptr1->next;
+        }
+        lptr = ptr1;
+    } while (swapped);
+}
+void urutkanByNama() {
+    if (temp == nullptr || temp->next == nullptr) return;
+    
+    bool swapped;
+    Keluhan *ptr1;
+    Keluhan *lptr = nullptr;
+    
+    do {
+        swapped = false;
+        ptr1 = temp;
+        
+        while (ptr1->next != lptr) {
+            if (strcmp(ptr1->nama, ptr1->next->nama) > 0) {
+                tukarData(ptr1, ptr1->next);
+                swapped = true;
+            }
+            ptr1 = ptr1->next;
+        }
+        lptr = ptr1;
+    } while (swapped);
+}
+
+void urutkanKeluhan() {
+    cout << "+> Urutkan Keluhan\n\n";
+    
+    int pilih;
+    cout << ":======================================:\n";
+    cout << "|        Menu Pengurutan Keluhan       |\n";
+    cout << ":======================================:\n";
+    cout << "| 1. Urutkan berdasarkan ID            |\n";
+    cout << "| 2. Urutkan berdasarkan nama pelapor  |\n";
+    cout << "| 3. Kembali ke menu utama             |\n";
+    cout << ":======================================:\n";
+    cout << "Masukkan pilihan : "; cin >> pilih;
+
+    switch (pilih) {
+        case 1:
+            urutkanById();
+            cout << "\nKeluhan berhasil diurutkan berdasarkan ID!\n";
+            break;
+        case 2:
+            urutkanByNama();
+            cout << "\nKeluhan berhasil diurutkan berdasarkan nama pelapor!\n";
+            break;
+        case 3:
+            return;
+        default:
+            cout << "Pilihan tidak valid, silakan coba lagi.\n";
+            break;
+    }
+    
+    simpanKeluhan();
+    system("pause");
+    system("cls");
+}
 
 // Fungsi untuk menghapus keluhan
 void hapusKeluhan() {
@@ -320,7 +414,8 @@ int main () {
                 cariKeluhan();
                 break;
             case 4: 
-                // urutkan keluhan
+                system("cls");
+                urutkanKeluhan();
                 break;
             case 5:
                 system("cls");
