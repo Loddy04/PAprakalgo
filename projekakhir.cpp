@@ -146,41 +146,65 @@ void tampilKeluhan() {
     system("cls");
 }
 
+void cariId() {
+    cout << "+> Cari keluhan berdasarkan ID\n\n";
+
+    int cari;
+    cout << "Masukkan ID pelapor yang dicari : "; cin >> cari;
+
+    Keluhan *bantu = temp;
+    bool ditemukan = false;
+    while (bantu != nullptr) {
+        if (bantu->id == cari) {
+            cout << ":==============================================:\n";
+            cout << "| Pelapor ke : " << bantu->id << endl;
+            cout << "| Nama pelapor : " << bantu->nama << endl;
+            cout << "| Kategori keluhan : " << bantu->kategori << endl;
+            cout << "| Isi keluhan : \n";
+            cout << "| " << bantu->isi << endl;
+            cout << ":==============================================:\n\n";
+            ditemukan = true;
+        }
+        bantu = bantu->next;
+    }
+
+    if (!ditemukan) {
+        cout << "Keluhan dengan ID tersebut tidak ditemukan.\n";
+    }
+
+    system("pause");
+    system("cls");
+}
+
 void cariNama() {
     cout << "+> Cari keluhan berdasarkan nama\n\n";
 
     char cari[50];
     cout << "Masukkan nama pelapor yang dicari : "; cin >> cari;
+
     Keluhan *bantu = temp;
+    bool ditemukan = false;
     while (bantu != nullptr) {
-        if (bantu->nama == cari) {
-            cout << "Pelapor ke : " << bantu->id << endl;
-            cout << "Nama pelapor : " << bantu->nama << endl;
-            cout << "Kategori keluhan : " << bantu->kategori << endl;
-            cout << "Isi keluhan : \n"; 
-            cout << bantu->isi << endl;
+        if (strcmp(bantu->nama, cari) == 0) {
+            cout << ":==============================================:\n";
+            cout << "| Pelapor ke : " << bantu->id << endl;
+            cout << "| Nama pelapor : " << bantu->nama << endl;
+            cout << "| Kategori keluhan : " << bantu->kategori << endl;
+            cout << "| Isi keluhan : \n";
+            cout << "| " << bantu->isi << endl;
+            cout << ":==============================================:\n\n";
+            ditemukan = true;
         }
         bantu = bantu->next;
     }
-}
 
-void cariTopik() {
-    cout << "+> Cari keluhan berdasarkan kategori\n\n";
-
-    char cari[50];
-    cout << "Masukkan kategori keluhan yang dicari : "; cin >> cari;
-    Keluhan *bantu = temp;
-    while (bantu != nullptr) {
-        if (bantu->kategori == cari) {
-            cout << "Pelapor ke : " << bantu->id << endl;
-            cout << "Nama pelapor : " << bantu->nama << endl;
-            cout << "Kategori keluhan : " << bantu->kategori << endl;
-            cout << "Isi keluhan : \n"; 
-            cout << bantu->isi << endl;
-        }
-        bantu = bantu->next;
+    if (!ditemukan) {
+        cout << "Keluhan dengan nama tersebut tidak ditemukan.\n";
     }
-}
+
+    system("pause");
+    system("cls");
+}  
 
 void cariKeluhan() {
     cout << "+> Cari keluhan \n\n";
@@ -189,8 +213,8 @@ void cariKeluhan() {
     cout << ":======================================:\n";
     cout << "|        Menu Pencarian Keluhan        |\n";
     cout << ":======================================:\n";
-    cout << "| 1. Cari berdasarkan nama pelapor     |\n";
-    cout << "| 2. Cari berdasarkan kategori keluhan |\n";
+    cout << "| 1. Cari berdasarkan ID pelapor       |\n";
+    cout << "| 2. Cari berdasarkan nama pelapor     |\n";
     cout << "| 3. Kembali ke menu utama             |\n";
     cout << ":======================================:\n";
     cout << "Masukkan pilihan : "; cin >> pilih;
@@ -198,11 +222,11 @@ void cariKeluhan() {
     switch (pilih) {
         case 1:
             system("cls");
-            cariNama();
+            cariId();
             break;
         case 2:
             system("cls");
-            cariTopik();
+            cariNama();
             break;
         case 3:
             return;
@@ -211,6 +235,8 @@ void cariKeluhan() {
             break;
     }
 }
+
+
 void tukarData(Keluhan *a, Keluhan *b) {
     int tempId = a->id;
     char tempNama[50], tempKategori[50], tempIsi[100];
