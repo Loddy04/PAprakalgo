@@ -125,6 +125,8 @@ void tampilKeluhan() {
 
     if (temp == nullptr) {
         cout << "Belum ada keluhan.\n";
+        system("pause");
+        system("cls");
         return;
     } 
 
@@ -342,68 +344,69 @@ void hapusKeluhan() {
     } 
 
     int cari;
-    cout << "Masukkan id laporan yang ingin dihapus : "; cin >> cari;
+    cout << "Masukkan ID laporan yang ingin dihapus : "; cin >> cari;
 
-    Keluhan *hapus;
+    Keluhan *hapus = nullptr;
+    Keluhan *bantu = temp;
 
-    if ((temp->id == cari)) {
-
+    // Cari data dan simpan pointer ke node yang akan dihapus
+    if (temp->id == cari) {
         hapus = temp;
-        temp = temp->next;
-        delete hapus;
     } else {
-        Keluhan *bantu = temp;
         while (bantu->next != nullptr && bantu->next->id != cari) {
             bantu = bantu->next;
         }
 
-        if(bantu->next == nullptr) {
-            cout << "\n !! Keluhan dengan id <" << cari << "> tidak ada !!\n\n";
+        if (bantu->next == nullptr) {
+            cout << "\n !! Keluhan dengan ID <" << cari << "> tidak ada !!\n\n";
             system("pause");
             system("cls");
             return;
         }
 
-        cout << ":==============================================:\n";
-        cout << "| Id pelapor : " << bantu->next->id << endl;
-        cout << "| Nama pelapor : " << bantu->next->nama << endl;
-        cout << "| Kategori keluhan : " << bantu->next->kategori << endl;
-        cout << "| Isi keluhan : \n"; 
-        cout << "|----------------------------------------------\n";
-        cout << "| " << bantu->next->isi << endl;
-        cout << ":==============================================:\n\n";
-
-        char choice;
-        cout << "Yakin ingin menghapus? (y/n) : ";
-        cin.ignore();
-        cin >> choice;
-
-        if (choice == 'y' || choice == 'Y') {
-            hapus = bantu->next;
-            bantu->next = hapus->next;
-            delete hapus;
-        } else {
-            cout << endl;
-            cout << ":=================================:\n";
-            cout << "| Penghapusan keluhan dibatalkan. |\n";
-            cout << ":=================================:\n";
-            system("pause");
-            system("cls");
-            return;
-        }
+        hapus = bantu->next;
     }
 
-    simpanKeluhan();
+    // Tampilkan data yang akan dihapus
+    cout << ":==============================================:\n";
+    cout << "| ID pelapor : " << hapus->id << endl;
+    cout << "| Nama pelapor : " << hapus->nama << endl;
+    cout << "| Kategori keluhan : " << hapus->kategori << endl;
+    cout << "| Isi keluhan : \n"; 
+    cout << "|----------------------------------------------\n";
+    cout << "| " << hapus->isi << endl;
+    cout << ":==============================================:\n\n";
 
-    cout << endl;
-    cout << ":============================:\n";
-    cout << "| Keluhan berhasil dihapus.  |\n";
-    cout << ":============================:\n";
+    // Konfirmasi
+    char choice;
+    cout << "Yakin ingin menghapus? (y/n) : ";
+    cin.ignore();
+    cin >> choice;
 
+    if (choice == 'y' || choice == 'Y') {
+        if (hapus == temp) {
+            temp = temp->next;
+        } else {
+            bantu->next = hapus->next;
+        }
+        delete hapus;
+
+        simpanKeluhan();
+        cout << endl;
+        cout << ":============================:\n";
+        cout << "| Keluhan berhasil dihapus.  |\n";
+        cout << ":============================:\n";
+    } else {
+        cout << endl;
+        cout << ":=================================:\n";
+        cout << "| Penghapusan keluhan dibatalkan. |\n";
+        cout << ":=================================:\n";
+    }
 
     system("pause");
     system("cls");
 }
+
 
 // Fungsi untuk menampilkan menu utama
 void tampilkanMenu() {
