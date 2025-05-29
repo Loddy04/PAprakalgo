@@ -341,31 +341,31 @@ void hapusKeluhan() {
         return;
     } 
 
-    char cari[50];
-    cout << "Masukkan nama pelapor yang ingin dihapus : "; cin >> cari;
+    int cari;
+    cout << "Masukkan id laporan yang ingin dihapus : "; cin >> cari;
 
     Keluhan *hapus;
-    // masih error belum bisa nangkep nama yang di cari
-    if (strcmp(temp->nama, cari) == 0) {
-        // jika record yang dihapus berada di paling depan
-        // strcmp membandingkan string tipe char
+
+    if ((temp->id == cari)) {
+
         hapus = temp;
         temp = temp->next;
         delete hapus;
     } else {
         Keluhan *bantu = temp;
-        while (bantu->next != nullptr && strcmp(bantu->next->nama, cari) != 0) {
+        while (bantu->next != nullptr && bantu->next->id != cari) {
             bantu = bantu->next;
         }
 
         if(bantu->next == nullptr) {
-            cout << "\n !! Keluhan dengan nama <" << cari << "> tidak ada !!\n\n";
+            cout << "\n !! Keluhan dengan id <" << cari << "> tidak ada !!\n\n";
             system("pause");
             system("cls");
             return;
         }
 
         cout << ":==============================================:\n";
+        cout << "| Id pelapor : " << bantu->next->id << endl;
         cout << "| Nama pelapor : " << bantu->next->nama << endl;
         cout << "| Kategori keluhan : " << bantu->next->kategori << endl;
         cout << "| Isi keluhan : \n"; 
